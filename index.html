@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Component Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <p class="eyebrow">Designing for and with AI Challenge — Web Playground</p>
+      <h1>Tech Component Collection</h1>
+      <p class="intro">Drei kleine interaktive Experimente zur Erforschung von Frontend-Frameworks und -Mustern für KI-relevante Interaktion, ein neu gestaltetes UI-Kit, eine generative Visualisierung und eine multimodale Vision-Demo.</p>
+      <nav class="site-nav">
+        <a href="#demo-1">01 · UI Sourcing</a>
+        <a href="#demo-2">02 · Generative Visuals</a>
+        <a href="#demo-3">03 · Multimodal Vision</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="demo-1" class="demo-section">
+      <h2>Modul 0 — UI Sourcing &amp; Customization</h2>
+      <p class="framework-tag">Aceternity UI · Lovable</p>
+      <div class="external-link-card">
+        <p>Diese Module lebt als separates Projekt mit eigenständigem Look:</p>
+        <a href="https://flip-words-time.lovable.app/" target="_blank" rel="noopener">→ flip-words-time.lovable.app</a>
+      </div>
+
+      <div class="tech-log">
+        <h3>Technical Log</h3>
+        <dl>
+          <dt>Framework</dt>
+          <dd>Aceternity UI, customized in Lovable</dd>
+          <dt>Why this choice</dt>
+          <dd>Aceternity bietet komplexe Interaktions-Patterns (Animation, Gooey-Effekt), die in Vanilla-JS aufwendig wären. Lovable als AI-Builder erlaubt schnelles radikales Customizing.</dd>
+          <dt>UX potential for AI</dt>
+          <dd>Word-Clock-Pattern eignet sich für KI-Status-Visualisierung (z.B. "AI is processing" als evolvierende Phrase). Gooey-Inputs signalisieren weiche, intelligente Systeme.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="demo-2" class="demo">
+      <div class="demo-head">
+        <span class="demo-index">02</span>
+        <h2>Generative Visuals</h2>
+        <span class="badge">Canvas API</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-stage">
+          <h3 class="stage-title">Particle Field</h3>
+          <canvas id="particles" class="particle-canvas"></canvas>
+          <p class="stage-caption">Move your cursor over the canvas — nearby particles drift away and redraw their connections.</p>
+        </div>
+
+        <div class="tech-log">
+          <h3>Technical Log</h3>
+          <dl>
+            <dt>Framework</dt>
+            <dd>Plain Canvas API + <code>requestAnimationFrame</code>, no external rendering library.</dd>
+            <dt>Why this choice</dt>
+            <dd>Bewusst keine Library, um die Bundle-Größe und Komplexität 
+minimal zu halten. Canvas API reicht für ~70 Particles + 
+Verbindungslinien problemlos.</dd>
+            <dt>UX potential for AI</dt>
+            <dd>Reaktive Hintergründe als Ambient-Layer 
+für KI-Interfaces. Particle-Behavior kann State der KI 
+visualisieren (Idle vs. Thinking vs. Streaming).</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo-3" class="demo">
+      <div class="demo-head">
+        <span class="demo-index">03</span>
+        <h2>Multimodal Vision</h2>
+        <span class="badge">MediaPipe Hands</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-stage">
+          <h3 class="stage-title">Hand Tracking</h3>
+          <div class="hand-stage">
+            <div class="hand-permission" id="hand-permission">
+              <p>This demo uses your webcam to outline your hand and detect a simple gesture (open palm / closed fist). Everything runs on-device — no video is recorded or sent anywhere.</p>
+              <button id="hand-enable" class="btn">Enable camera</button>
+              <p class="hand-fallback" id="hand-fallback" hidden>Camera access was denied or isn't available in this browser. You can allow it later in your browser's site settings and reload the page — the rest of the page works fine without it.</p>
+            </div>
+            <div class="hand-view" id="hand-view" hidden>
+              <video id="hand-video" playsinline muted></video>
+              <canvas id="hand-canvas"></canvas>
+              <div class="gesture-badge" id="gesture-badge">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-log">
+          <h3>Technical Log</h3>
+          <dl>
+            <dt>Framework</dt>
+            <dd>MediaPipe Hands via CDN</dd>
+            <dt>Why this choice</dt>
+            <dd>Keine Installation, läuft als Script-Tag im Browser. Vortrainiertes Modell, sofort einsatzbereit für Hand-Landmarks.</dd>
+            <dt>UX potential for AI</dt>
+            <dd>Gesture-Input als alternative Modalität zu Touch/Keyboard. Besonders relevant für KI-Interfaces in Hands-Free-Kontexten (Kochen, Auto, AR).</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Challenge F</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script>
+    // ---------- Particle Field ----------
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    const mouse = { x: null, y: null };
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = canvas.clientWidth * devicePixelRatio;
+      canvas.height = canvas.clientHeight * devicePixelRatio;
+    }
+
+    function initParticles() {
+      resizeCanvas();
+      particles = Array.from({ length: 70 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: (Math.random() * 1.6 + 1) * devicePixelRatio,
+        color: Math.random() > 0.5 ? '#E8B654' : '#7A93A8'
+      }));
+    }
+
+    function stepParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        if (mouse.x !== null) {
+          const dx = mouse.x - p.x, dy = mouse.y - p.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 120 * devicePixelRatio && dist > 0.01) {
+            p.x -= (dx / dist) * 0.6;
+            p.y -= (dy / dist) * 0.6;
+          }
+        }
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < 70 * devicePixelRatio) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = 'rgba(110, 106, 97, 0.12)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      if (!reduceMotion) requestAnimationFrame(stepParticles);
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = (e.clientX - rect.left) * devicePixelRatio;
+      mouse.y = (e.clientY - rect.top) * devicePixelRatio;
+    });
+    canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+    window.addEventListener('resize', () => initParticles());
+
+    initParticles();
+    stepParticles();
+    if (reduceMotion) stepParticles();
+
+    // ---------- Hand Tracking ----------
+    const handEnableBtn = document.getElementById('hand-enable');
+    const handPermEl = document.getElementById('hand-permission');
+    const handFallbackEl = document.getElementById('hand-fallback');
+    const handViewEl = document.getElementById('hand-view');
+    const handVideo = document.getElementById('hand-video');
+    const handCanvas = document.getElementById('hand-canvas');
+    const handCtx = handCanvas.getContext('2d');
+    const gestureBadge = document.getElementById('gesture-badge');
+
+    let handsModel;
+
+    function dist(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function detectGesture(landmarks) {
+      const wrist = landmarks[0];
+      const tips = [8, 12, 16, 20];
+      const pips = [6, 10, 14, 18];
+      let extended = 0;
+      for (let i = 0; i < tips.length; i++) {
+        if (dist(landmarks[tips[i]], wrist) > dist(landmarks[pips[i]], wrist)) extended++;
+      }
+      if (extended >= 3) return 'Open palm';
+      if (extended <= 1) return 'Closed fist';
+      return 'Hand detected';
+    }
+
+    function onHandResults(results) {
+      handCanvas.width = handVideo.videoWidth;
+      handCanvas.height = handVideo.videoHeight;
+      handCtx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length) {
+        const landmarks = results.multiHandLandmarks[0];
+        drawConnectors(handCtx, landmarks, HAND_CONNECTIONS, { color: '#7A93A8', lineWidth: 3 });
+        drawLandmarks(handCtx, landmarks, { color: '#E8B654', radius: 4 });
+        gestureBadge.textContent = detectGesture(landmarks);
+      } else {
+        gestureBadge.textContent = '—';
+      }
+    }
+
+    async function enableHandTracking() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 480, height: 360 } });
+        handVideo.srcObject = stream;
+        await handVideo.play();
+
+        handPermEl.hidden = true;
+        handViewEl.hidden = false;
+
+        handsModel = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}` });
+        handsModel.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.6, minTrackingConfidence: 0.5 });
+        handsModel.onResults(onHandResults);
+
+        const loop = async () => {
+          await handsModel.send({ image: handVideo });
+          requestAnimationFrame(loop);
+        };
+        loop();
+      } catch (err) {
+        handFallbackEl.hidden = false;
+      }
+    }
+
+    handEnableBtn.addEventListener('click', enableHandTracking);
+  </script>
+</body>
+</html>
